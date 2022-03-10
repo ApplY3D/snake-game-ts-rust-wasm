@@ -1,12 +1,18 @@
+
+allocate 1 page of memory
+
 (module
   (import "console" "log" (func $log))
   (import "console" "error" (func $error))
-  (func $sum (param $a i32) (param $b i32) (result i32)
+  (memory $mem 1)
+  (data (i32.const 0) "Hello")
+  (func $sum  (param $a i32) (param $b i32) (result i32)
     call $error
     call $log
     local.get $a
     local.get $b
     i32.add
   )
+  (export "mem" (memory $mem))
   (export "sum" (func $sum))
 )
