@@ -6,7 +6,8 @@
   "dependencies": {
     "copy-webpack-plugin": "^10.2.4",
     "webpack": "^5.70.0",
-    "webpack-cli": "^4.9.2"
+    "webpack-cli": "^4.9.2",
+    "snake_game":"file:../pkg"
   },
   "devDependencies": {
     "webpack-dev-server": "^4.7.4"
