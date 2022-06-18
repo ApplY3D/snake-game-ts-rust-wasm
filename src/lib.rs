@@ -3,11 +3,16 @@ use wasm_bindgen::prelude::*;
 // should be built with `wasm-pack build --target web`
 
 #[wasm_bindgen]
-pub fn greet(name: &str) {
-    alert(name)
+pub struct World {
+    width: usize,
 }
 
 #[wasm_bindgen]
-extern "C" {
-    pub fn alert(s: &str);
+impl World {
+    pub fn new(width: usize) -> World {
+        World { width }
+    }
+    pub fn width(&self) -> usize {
+        self.width
+    }
 }
