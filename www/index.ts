@@ -2,15 +2,22 @@ import initWasm, { World } from 'snake_game';
 
 const CELL_SIZE = 50;
 const WIDTH = 8;
-const INITIAL_INDEX = 1;
+const INITIAL_INDEX = Date.now() % (WIDTH * WIDTH);
+const FPS = 6;
 
 /**
  *
  * @param {number} cellSize
  * @param {number} worldWidth
  * @param {number} [initialIndex=0]
+ * @param {number} [fps=3]
  */
-async function init(cellSize: number, worldWidth: number, initialIndex = 0) {
+async function init(
+  cellSize: number,
+  worldWidth: number,
+  initialIndex = 0,
+  fps = 3
+) {
   const wasm = await initWasm();
   const world = World.new(worldWidth, initialIndex);
   const worldSize = worldWidth * cellSize;
@@ -57,11 +64,11 @@ async function init(cellSize: number, worldWidth: number, initialIndex = 0) {
       world.update();
       paint();
       requestAnimationFrame(update);
-    }, 100);
+    }, 1000 / fps);
   }
 
   paint();
   update();
 }
 
-init(CELL_SIZE, WIDTH, INITIAL_INDEX);
+init(CELL_SIZE, WIDTH, INITIAL_INDEX, FPS);

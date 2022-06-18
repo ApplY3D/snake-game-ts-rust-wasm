@@ -26,16 +26,18 @@ impl Snake {
 #[wasm_bindgen]
 impl World {
     pub fn new(world_width: usize, snake_index: usize) -> World {
+        let size = world_width * world_width;
+
         if world_width < 1 {
             wasm_bindgen::throw_str("world_width must be greater than 0")
         }
-        if snake_index >= world_width {
-            wasm_bindgen::throw_str("snake_index must be less than world_width")
+        if snake_index >= size {
+            wasm_bindgen::throw_str(format!("snake_index must be less than {}", size).as_str())
         }
 
         World {
             width: world_width,
-            size: world_width * world_width,
+            size: size,
             snake: Snake::new(snake_index),
         }
     }
