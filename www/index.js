@@ -49,8 +49,22 @@ async function init(cellSize, worldWidth, initialIndex = 0) {
     ctx.stroke();
   }
 
-  drawWorld();
-  drawSnake();
+  function paint() {
+    drawWorld();
+    drawSnake();
+  }
+
+  function update() {
+    setTimeout(() => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      world.update();
+      paint();
+      requestAnimationFrame(update);
+    }, 100);
+  }
+
+  paint();
+  update();
 }
 
 init(CELL_SIZE, WIDTH, INITIAL_INDEX);
