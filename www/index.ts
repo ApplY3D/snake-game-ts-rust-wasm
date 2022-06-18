@@ -1,4 +1,4 @@
-import initWasm, { World } from 'snake_game';
+import initWasm, { World, Direction } from 'snake_game';
 
 const CELL_SIZE = 50;
 const WIDTH = 8;
@@ -66,6 +66,19 @@ async function init(
       requestAnimationFrame(update);
     }, 1000 / fps);
   }
+
+  document.addEventListener('keydown', (e) => {
+    switch (e.code) {
+      case 'ArrowUp':
+        return world.set_snake_direction(Direction.Up);
+      case 'ArrowDown':
+        return world.set_snake_direction(Direction.Down);
+      case 'ArrowLeft':
+        return world.set_snake_direction(Direction.Left);
+      case 'ArrowRight':
+        return world.set_snake_direction(Direction.Right);
+    }
+  });
 
   paint();
   update();
