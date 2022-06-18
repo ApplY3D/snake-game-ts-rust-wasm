@@ -10,15 +10,12 @@ const INITIAL_INDEX = 1;
  * @param {number} worldWidth
  * @param {number} [initialIndex=0]
  */
-async function init(cellSize, worldWidth, initialIndex = 0) {
+async function init(cellSize: number, worldWidth: number, initialIndex = 0) {
   const wasm = await initWasm();
   const world = World.new(worldWidth, initialIndex);
   const worldSize = worldWidth * cellSize;
 
-  /**
-   * @type {HTMLCanvasElement}
-   */
-  const canvas = document.getElementById('game');
+  const canvas = <HTMLCanvasElement>document.getElementById('game');
   const ctx = canvas.getContext('2d');
   canvas.height = worldSize;
   canvas.width = worldSize;
