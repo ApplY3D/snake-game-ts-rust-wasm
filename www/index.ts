@@ -38,6 +38,19 @@ async function init(
   canvas.height = worldSize;
   canvas.width = worldSize;
 
+  const gameControlBtn = document.getElementById('game-control-btn');
+  const gameStatusBox = document.getElementById('game-status');
+  gameControlBtn.addEventListener('click', () => {
+    const status = world.game_status();
+    if (status === undefined) {
+      gameControlBtn.textContent = 'Reload';
+      world.start_game();
+      play();
+    } else {
+      location.reload();
+    }
+  });
+
   function getSnakeCells() {
     const snakeCellsPtr = world.snake_cells_ptr();
     const snakeCellsLen = world.snake_cells_len();
@@ -86,18 +99,23 @@ async function init(
     });
   }
 
+  function drawStatus() {
+    gameStatusBox.textContent = world.game_status_text();
+  }
+
   function paint() {
     drawWorld();
     drawReward();
     drawSnake();
+    drawStatus();
   }
 
-  function update() {
+  function play() {
     setTimeout(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       world.update();
       paint();
-      requestAnimationFrame(update);
+      requestAnimationFrame(play);
     }, 1000 / fps);
   }
 
@@ -115,7 +133,6 @@ async function init(
   });
 
   paint();
-  update();
 }
 
 init(CELL_SIZE, WIDTH, SNAKE_SIZE, INITIAL_INDEX, FPS, DEFAULT_PALLETTE);
