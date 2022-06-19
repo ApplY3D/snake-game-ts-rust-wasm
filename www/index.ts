@@ -4,7 +4,7 @@ import { rnd } from './utils/rnd';
 const CELL_SIZE = 50;
 const WIDTH = 8;
 const SNAKE_SIZE = 3;
-const INITIAL_INDEX = rnd(0, WIDTH * WIDTH);
+const INITIAL_INDEX = rnd(0, WIDTH * WIDTH - 1);
 const FPS = 6;
 const DEFAULT_PALLETTE = {
   head: '#7777db',

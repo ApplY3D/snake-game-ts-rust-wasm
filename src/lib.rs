@@ -83,7 +83,7 @@ impl World {
         World {
             size,
             width: world_width,
-            reward_cell: World::gen_reward_cell(size, &snake.body),
+            reward_cell: World::gen_reward_cell(size - 1, &snake.body),
             snake,
             next_cell: None,
             status: None,
@@ -172,7 +172,7 @@ impl World {
                 if self.reward_cell == Some(self.snake_head()) {
                     if self.snake_cells_len() < self.size {
                         self.points += 1;
-                        self.reward_cell = World::gen_reward_cell(self.size, &self.snake.body);
+                        self.reward_cell = World::gen_reward_cell(self.size - 1, &self.snake.body);
                     } else {
                         self.reward_cell = None;
                         self.status = Some(GameStatus::Won)
