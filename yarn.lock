@@ -2029,9 +2029,14 @@
   "resolved" "https://registry.npmjs.org/slash/-/slash-4.0.0.tgz"
   "version" "4.0.0"
 
-"snake_game@file:../pkg":
-  "resolved" "file:../pkg"
+"snake_game@file:./pkg":
+  "resolved" "file:pkg"
   "version" "0.1.0"
+  dependencies:
+    "copy-webpack-plugin" "^10.2.4"
+    "snake_game" "file:./pkg"
+    "webpack" "^5.70.0"
+    "webpack-cli" "^4.9.2"
 
 "sockjs@^0.3.21":
   "integrity" "sha512-GJgLTZ7vYb/JtPSSZ10hsOYIvEYsjbNU+zPdIHcUaWVNUEPivzxku31865sSSud0Da0W4lEeOPlmw93zLQchuQ=="

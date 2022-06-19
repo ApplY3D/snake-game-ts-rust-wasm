@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./public/",
+    "outDir": "./www/public/",
     "noImplicitAny": true,
     "module": "ESNext",
     "target": "es5",

@@ -5,9 +5,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
  * @type {import('webpack').Configuration}
  */
 module.exports = {
-  entry: './bootstrap.ts',
+  entry: './www/bootstrap.ts',
   output: {
-    path: path.resolve(__dirname, 'public'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
   },
   mode: 'development',
@@ -25,7 +25,7 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [{ from: './index.html', to: './' }],
+      patterns: [{ from: './www/index.html', to: './' }],
     }),
   ],
 };

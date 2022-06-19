@@ -1,7 +1,5 @@
 use wasm_bindgen::prelude::*;
 
-// should be built with `wasm-pack build --target web`
-
 #[wasm_bindgen(module = "/www/utils/rnd.js")]
 extern "C" {
     fn rnd(from: usize, to: usize) -> usize;
