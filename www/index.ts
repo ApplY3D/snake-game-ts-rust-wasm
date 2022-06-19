@@ -1,4 +1,4 @@
-import initWasm, { World, Direction } from 'snake_game';
+import initWasm, { World, Direction, GameStatus } from 'snake_game';
 import { rnd } from './utils/rnd';
 
 const CELL_SIZE = 50;
@@ -33,6 +33,8 @@ async function init(
   const world = World.new(worldWidth, initialIndex, snakeSize);
   const worldSize = worldWidth * cellSize;
 
+  let timeout = -1;
+
   const canvas = <HTMLCanvasElement>document.getElementById('game');
   const ctx = canvas.getContext('2d');
   canvas.height = worldSize;
@@ -40,6 +42,7 @@ async function init(
 
   const gameControlBtn = document.getElementById('game-control-btn');
   const gameStatusBox = document.getElementById('game-status');
+  const gamePointsBox = document.getElementById('game-points');
   gameControlBtn.addEventListener('click', () => {
     const status = world.game_status();
     if (status === undefined) {
@@ -103,6 +106,7 @@ async function init(
 
   function drawStatus() {
     gameStatusBox.textContent = world.game_status_text();
+    gamePointsBox.textContent = world.points().toString();
   }
 
   function paint() {
@@ -113,12 +117,18 @@ async function init(
   }
 
   function play() {
-    setTimeout(() => {
+    const status = world.game_status();
+    if (status === GameStatus.Won || status === GameStatus.Lost) {
+      gameControlBtn.textContent = 'Try again';
+      return clearTimeout(timeout);
+    }
+
+    timeout = setTimeout(() => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       world.update();
       paint();
       requestAnimationFrame(play);
-    }, 1000 / fps);
+    }, 1000 / fps) as unknown as number;
   }
 
   document.addEventListener('keydown', (e) => {
