@@ -2,6 +2,11 @@ use wasm_bindgen::prelude::*;
 
 // should be built with `wasm-pack build --target web`
 
+#[wasm_bindgen(module = "/www/utils/rnd.js")]
+extern "C" {
+    fn rnd(from: usize, to: usize) -> usize;
+}
+
 #[wasm_bindgen]
 #[derive(PartialEq)]
 pub enum Direction {
@@ -11,7 +16,7 @@ pub enum Direction {
     Left,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq)]
 pub struct SnakeCell(usize);
 
 struct Snake {
@@ -25,6 +30,7 @@ pub struct World {
     size: usize,
     snake: Snake,
     next_cell: Option<SnakeCell>,
+    reward_cell: usize,
 }
 
 impl Snake {
@@ -46,6 +52,7 @@ impl Snake {
 impl World {
     pub fn new(world_width: usize, snake_index: usize, snake_size: usize) -> World {
         let size = world_width * world_width;
+        let reward_count = 1;
 
         if world_width < 1 {
             wasm_bindgen::throw_str("world_width must be greater than 0")
@@ -53,11 +60,23 @@ impl World {
         if snake_index >= size {
             wasm_bindgen::throw_str(format!("snake_index must be less than {}", size).as_str())
         }
+        if snake_size + reward_count >= size {
+            wasm_bindgen::throw_str(
+                format!(
+                    "snake_size {} + reward_count {} overflow world_size {}",
+                    snake_size, reward_count, size
+                )
+                .as_str(),
+            )
+        }
+
+        let snake = Snake::new(snake_index, snake_size);
 
         World {
             size,
             width: world_width,
-            snake: Snake::new(snake_index, snake_size),
+            reward_cell: World::gen_reward_cell(size, &snake.body),
+            snake,
             next_cell: None,
         }
     }
@@ -66,8 +85,25 @@ impl World {
         self.width
     }
 
+    fn gen_reward_cell(max: usize, snake_body: &Vec<SnakeCell>) -> usize {
+        let mut reward_cell: usize;
+
+        loop {
+            reward_cell = rnd(0, max);
+            if !snake_body.contains(&SnakeCell(reward_cell)) {
+                break;
+            }
+        }
+
+        reward_cell
+    }
+
     pub fn snake_head(&self) -> usize {
         self.snake.body[0].0
+    }
+
+    pub fn reward_cell(&self) -> usize {
+        self.reward_cell
     }
 
     pub fn set_snake_direction(&mut self, direction: Direction) {
@@ -94,6 +130,11 @@ impl World {
 
         for i in 1..self.snake.body.len() {
             self.snake.body[i] = SnakeCell(temp[i - 1].0);
+        }
+
+        if self.reward_cell == self.snake.body[0].0 {
+            self.snake.body.push(SnakeCell(self.snake.body[1].0));
+            self.reward_cell = World::gen_reward_cell(self.size, &self.snake.body);
         }
     }
 

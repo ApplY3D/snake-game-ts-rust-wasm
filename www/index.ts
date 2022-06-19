@@ -1,13 +1,15 @@
 import initWasm, { World, Direction } from 'snake_game';
+import { rnd } from './utils/rnd';
 
 const CELL_SIZE = 50;
 const WIDTH = 8;
 const SNAKE_SIZE = 3;
-const INITIAL_INDEX = Date.now() % (WIDTH * WIDTH);
+const INITIAL_INDEX = rnd(0, WIDTH * WIDTH);
 const FPS = 6;
 const DEFAULT_PALLETTE = {
   head: '#7777db',
   body: '#000',
+  reward: '#ff0000',
 };
 
 /**
@@ -25,7 +27,7 @@ async function init(
   snakeSize: number,
   initialIndex = 0,
   fps = 3,
-  pallette: { head: string; body: string } = DEFAULT_PALLETTE
+  pallette: Record<'head' | 'body' | 'reward', string> = DEFAULT_PALLETTE
 ) {
   const wasm = await initWasm();
   const world = World.new(worldWidth, initialIndex, snakeSize);
@@ -63,13 +65,21 @@ async function init(
     ctx.stroke();
   }
 
+  function drawReward() {
+    const idx = world.reward_cell();
+    const col = idx % worldWidth;
+    const row = Math.floor(idx / worldWidth);
+    ctx.fillStyle = pallette.reward;
+    ctx.beginPath();
+    ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+    ctx.stroke();
+  }
+
   function drawSnake() {
     getSnakeCells().forEach((cellIndex, i) => {
       const col = cellIndex % worldWidth;
       const row = Math.floor(cellIndex / worldWidth);
-
       ctx.fillStyle = i === 0 ? pallette.head : pallette.body;
-
       ctx.beginPath();
       ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
       ctx.stroke();
@@ -78,6 +88,7 @@ async function init(
 
   function paint() {
     drawWorld();
+    drawReward();
     drawSnake();
   }
 
