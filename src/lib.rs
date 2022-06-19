@@ -59,6 +59,10 @@ impl Snake {
 #[wasm_bindgen]
 impl World {
     pub fn new(world_width: usize, snake_index: usize, snake_size: usize) -> World {
+        World::create_world(world_width, snake_index, snake_size)
+    }
+
+    fn create_world(world_width: usize, snake_index: usize, snake_size: usize) -> World {
         let size = world_width * world_width;
         let reward_count = 1;
 
