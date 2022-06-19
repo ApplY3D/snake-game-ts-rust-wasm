@@ -89,14 +89,16 @@ async function init(
   }
 
   function drawSnake() {
-    getSnakeCells().forEach((cellIndex, i) => {
+    const cells = getSnakeCells();
+    for (let i = cells.length - 1; i >= 0; i--) {
+      const cellIndex = cells[i];
       const col = cellIndex % worldWidth;
       const row = Math.floor(cellIndex / worldWidth);
       ctx.fillStyle = i === 0 ? pallette.head : pallette.body;
       ctx.beginPath();
       ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
       ctx.stroke();
-    });
+    }
   }
 
   function drawStatus() {
